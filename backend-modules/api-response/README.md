@@ -1,31 +1,33 @@
-BuildBlocks API Response & Error Handler
+# BuildBlocks API Response & Error Handler
 
 A reusable Spring Boot module that helps applications return consistent API error responses with meaningful error codes, timestamps, request IDs, and field-level validation details.
 
-Features
+## Features
 
-- Consistent error responses — a predictable JSON structure for API errors.
-- Standard error codes — codes such as "RESOURCE_NOT_FOUND", "VALIDATION_FAILED", and "INTERNAL_SERVER_ERROR".
-- HTTP status mapping — maps supported application errors to appropriate HTTP status codes.
-- Request ID support — generates or accepts a validated "X-Request-ID" for request correlation.
-- Validation error details — returns field names and validation messages for supported request validation failures.
-- Safe unexpected-error responses — avoids returning internal exception details to API clients.
-- Spring Boot auto-configuration — automatically configures the handler and request ID filter when enabled.
-- Customizable integration — allows applications to provide their own beans when appropriate.
-- Automated tests — verifies error response structure, exception handling, and request ID behavior.
+- **Consistent Error Responses** — Provides a predictable JSON structure for API errors.
+- **Standard Error Codes** — Supports error codes such as `RESOURCE_NOT_FOUND`, `VALIDATION_FAILED`, and `INTERNAL_SERVER_ERROR`.
+- **HTTP Status Mapping** — Maps supported application errors to appropriate HTTP status codes.
+- **Request ID Support** — Generates or accepts a validated `X-Request-ID` for request correlation.
+- **Validation Error Details** — Returns field names and validation messages for supported request validation failures.
+- **Safe Unexpected-Error Responses** — Avoids returning internal exception details to API clients.
+- **Spring Boot Auto-Configuration** — Automatically configures the error handler and request ID filter when enabled.
+- **Customizable Integration** — Allows applications to provide their own beans when appropriate.
+- **Automated Tests** — Verifies error response structure, exception handling, and request ID behavior.
 
-Project Status
+## Project Status
 
-Version: "0.1.0-SNAPSHOT"
+- **Version:** `0.1.0-SNAPSHOT`
+- **Status:** Under Development
 
 This module is under development. Its configuration, API, and behavior may change before the first stable release.
 
-Error Response Format
+## Error Response Format
 
 The module returns errors in a consistent JSON format.
 
-Example
+### Example
 
+```json
 {
   "success": false,
   "error": {
@@ -37,22 +39,25 @@ Example
   "path": "/api/expenses/999",
   "fieldErrors": []
 }
+```
 
-Field descriptions
+### Field Descriptions
 
-Field| Description
-"success"| Always "false" for an error response.
-"error.code"| Stable application error code.
-"error.message"| Human-readable error message.
-"error.timestamp"| Time the error response was created, in UTC using ISO 8601 format.
-"error.requestId"| Request correlation ID, when available.
-"path"| Request URI that produced the error.
-"fieldErrors"| List of field-level validation errors; an empty list when none apply.
+| Field | Description |
+|---|---|
+| `success` | Always `false` for an error response. |
+| `error.code` | Stable application error code. |
+| `error.message` | Human-readable error message. |
+| `error.timestamp` | Time the error response was created, in UTC using ISO 8601 format. |
+| `error.requestId` | Request correlation ID, when available. |
+| `path` | Request URI that produced the error. |
+| `fieldErrors` | List of field-level validation errors; an empty list when none apply. |
 
-Example validation errors
+### Example Validation Errors
 
 For invalid request data, the response can include field-specific errors:
 
+```json
 {
   "success": false,
   "error": {
@@ -69,66 +74,75 @@ For invalid request data, the response can include field-specific errors:
     }
   ]
 }
+```
 
-The HTTP status code is sent separately in the HTTP response. For example, a validation failure uses "400 Bad Request", while a missing resource uses "404 Not Found".
+The HTTP status code is sent separately in the HTTP response. For example, a validation failure uses `400 Bad Request`, while a missing resource uses `404 Not Found`.
 
-Supported Error Codes
+## Supported Error Codes
 
-Error code| HTTP status| Meaning
-"VALIDATION_FAILED"| 400| Request data failed validation.
-"INVALID_REQUEST"| 400| The request contains invalid input.
-"UNAUTHORIZED"| 401| Authentication is required or invalid.
-"FORBIDDEN"| 403| The caller is not permitted to perform the operation.
-"RESOURCE_NOT_FOUND"| 404| The requested resource does not exist.
-"METHOD_NOT_ALLOWED"| 405| The HTTP method is not supported for the requested endpoint.
-"CONFLICT"| 409| The request conflicts with the current resource state.
-"DATABASE_ERROR"| 500| A database-related application error occurred.
-"INTERNAL_SERVER_ERROR"| 500| An unexpected or otherwise unmapped server error occurred.
+| Error Code | HTTP Status | Meaning |
+|---|---:|---|
+| `VALIDATION_FAILED` | 400 | Request data failed validation. |
+| `INVALID_REQUEST` | 400 | The request contains invalid input. |
+| `UNAUTHORIZED` | 401 | Authentication is required or invalid. |
+| `FORBIDDEN` | 403 | The caller is not permitted to perform the operation. |
+| `RESOURCE_NOT_FOUND` | 404 | The requested resource does not exist. |
+| `METHOD_NOT_ALLOWED` | 405 | The HTTP method is not supported for the requested endpoint. |
+| `CONFLICT` | 409 | The request conflicts with the current resource state. |
+| `DATABASE_ERROR` | 500 | A database-related application error occurred. |
+| `INTERNAL_SERVER_ERROR` | 500 | An unexpected or otherwise unmapped server error occurred. |
 
-Using custom exceptions
+## Using Custom Exceptions
 
 The module provides specialized exceptions for common application errors:
 
-- "ResourceNotFoundException"
-- "InvalidRequestException"
-- "UnauthorizedException"
-- "ForbiddenException"
-- "ConflictException"
-- "DatabaseException"
+- `ResourceNotFoundException`
+- `InvalidRequestException`
+- `UnauthorizedException`
+- `ForbiddenException`
+- `ConflictException`
+- `DatabaseException`
 
 These exceptions can be thrown from application code and handled by the module's exception handler.
 
-For example:
+### Example
 
+```java
 throw new ResourceNotFoundException("Expense not found");
+```
 
-Security note: Only pass messages that are safe to show to API clients. Never include passwords, database credentials, SQL statements, stack traces, or other internal implementation details in exception messages.
+**Security Note:** Only pass messages that are safe to show to API clients. Never include passwords, database credentials, SQL statements, stack traces, or other internal implementation details in exception messages.
 
-Configuration
+## Configuration
 
 The module uses the following configuration property:
 
+```properties
 buildblocks.api-response.enabled=true
+```
 
-Disable the module
+### Disable the Module
 
 To disable its auto-configuration in an application, set:
 
+```properties
 buildblocks.api-response.enabled=false
+```
 
 When the property is missing, auto-configuration is enabled by default.
 
-Integration notes
+## Integration Notes
 
 - The module is intended for Spring Boot servlet-based web applications.
 - It provides a default exception handler and request ID filter.
 - Applications can provide their own beans to customize or replace default behavior, subject to Spring Boot bean registration and configuration ordering.
 - Applications using Spring Security may need additional security-specific exception handling to ensure authentication and authorization errors follow the same response format.
-- Only exceptions explicitly supported by the handler are mapped to their documented status codes. Other unexpected exceptions receive a generic "500 Internal Server Error" response.
+- Only exceptions explicitly supported by the handler are mapped to their documented status codes. Other unexpected exceptions receive a generic `500 Internal Server Error` response.
 - Database exceptions should be translated deliberately; not every database failure is necessarily a server error, and transient availability failures may require different handling.
 
-Project Structure
+## Project Structure
 
+```text
 api-response/
 ├── pom.xml
 ├── README.md
@@ -145,30 +159,37 @@ api-response/
     │           └── AutoConfiguration.imports
     └── test/
         └── java/io/github/buildblocks/apiresponse/
+```
 
-Build and Test
+## Build and Test
 
-Requirements:
+### Requirements
 
 - Java 21 or later
 - Maven 3.9 or later
 
-Run these commands from the "backend-modules/api-response" directory.
+Run the following commands from the `backend-modules/api-response` directory.
 
-Run the tests:
+**Run the tests:**
 
+```bash
 mvn test
+```
 
-Perform a clean verification build:
+**Perform a clean verification build:**
 
+```bash
 mvn clean verify
+```
 
-Build the JAR:
+**Build the JAR:**
 
+```bash
 mvn package
+```
 
-The generated JAR is placed in the "target/" directory.
+The generated JAR is placed in the `target/` directory.
 
-License
+## License
 
 The license for this module will be specified when the repository's licensing terms are finalized.
