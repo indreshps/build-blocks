@@ -156,7 +156,7 @@ api-response/
     │   │   └── response/
     │   └── resources/
     │       └── META-INF/spring/
-    │           └── AutoConfiguration.imports
+    │           └── org.springframework.boot.autoconfigure.AutoConfiguration.imports
     └── test/
         └── java/io/github/buildblocks/apiresponse/
 ```
@@ -193,18 +193,23 @@ The generated JAR is placed in the `target/` directory.
 
 ## Using as a Maven Dependency
 
-The module is currently under development and has not yet been published to a public Maven repository.
+This module is under development and has not been published to Maven Central yet. To use it today, install it into your local Maven repository:
 
-Once the module is available in a Maven repository, add the following dependency to your Spring Boot application's pom.xml:
+1. Clone the repository:
+
+git clone https://github.com/indreshps5/build-blocks.git
+2. Install the module:
+
+cd build-blocks/backend-modules/api-response
+mvn clean install
+3. Add the dependency to your Spring Boot application's pom.xml:
 
 <dependency>
     <groupId>io.github.buildblocks</groupId>
     <artifactId>buildblocks-api-response-spring-boot-starter</artifactId>
-    <version>RELEASE_VERSION</version>
+    <version>0.1.0-SNAPSHOT</version>
 </dependency>
-Replace RELEASE_VERSION with the actual published version.
-
-After adding the dependency, the module's auto-configuration can register the default API exception handler and request ID filter in a compatible Spring Boot servlet application.
+No extra configuration is needed. The error handler and request ID filter are registered automatically in a Spring Boot servlet application.
 
 ## License
 
