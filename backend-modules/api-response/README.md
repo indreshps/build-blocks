@@ -226,4 +226,4 @@ No extra configuration is needed when the module's auto-configuration is correct
 
 ## License
 
-The license for this module will be specified when the repository's licensing terms are finalized.
+This project is licensed under the MIT License. See the [LICENSE](../../LICENSE) file in the repository root for details.
