@@ -148,17 +148,20 @@ api-response/
 ├── README.md
 └── src/
     ├── main/
-    │   ├── java/io/github/buildblocks/apiresponse/
-    │   │   ├── autoconfigure/
-    │   │   ├── exception/
-    │   │   ├── filter/
-    │   │   ├── handler/
-    │   │   └── response/
+    │   ├── java/
+    │   │   └── io/github/buildblocks/apiresponse/
+    │   │       ├── autoconfigure/
+    │   │       ├── exception/
+    │   │       ├── filter/
+    │   │       ├── handler/
+    │   │       └── response/
     │   └── resources/
-    │       └── META-INF/spring/
-    │           └── org.springframework.boot.autoconfigure.AutoConfiguration.imports
+    │       └── META-INF/
+    │           └── spring/
+    │               └── org.springframework.boot.autoconfigure.AutoConfiguration.imports
     └── test/
-        └── java/io/github/buildblocks/apiresponse/
+        └── java/
+            └── io/github/buildblocks/apiresponse/
 ```
 
 ## Build and Test
@@ -190,26 +193,36 @@ mvn package
 
 The generated JAR is placed in the `target/` directory.
 
-
 ## Using as a Maven Dependency
 
-This module is under development and has not been published to Maven Central yet. To use it today, install it into your local Maven repository:
+This module is under development and has not been published to Maven Central yet. To use it today, install it into your local Maven repository.
 
-1. Clone the repository:
+### Step 1: Clone the Repository
 
+```bash
 git clone https://github.com/indreshps5/build-blocks.git
-2. Install the module:
+```
 
+### Step 2: Install the Module
+
+```bash
 cd build-blocks/backend-modules/api-response
 mvn clean install
-3. Add the dependency to your Spring Boot application's pom.xml:
+```
 
+### Step 3: Add the Dependency to Your Spring Boot Application
+
+Add the following dependency to your application's `pom.xml`:
+
+```xml
 <dependency>
     <groupId>io.github.buildblocks</groupId>
     <artifactId>buildblocks-api-response-spring-boot-starter</artifactId>
     <version>0.1.0-SNAPSHOT</version>
 </dependency>
-No extra configuration is needed. The error handler and request ID filter are registered automatically in a Spring Boot servlet application.
+```
+
+No extra configuration is needed when the module's auto-configuration is correctly registered and enabled. The error handler and request ID filter are automatically configured in a supported Spring Boot servlet application.
 
 ## License
 
