@@ -190,6 +190,22 @@ mvn package
 
 The generated JAR is placed in the `target/` directory.
 
+
+## Using as a Maven Dependency
+
+The module is currently under development and has not yet been published to a public Maven repository.
+
+Once the module is available in a Maven repository, add the following dependency to your Spring Boot application's pom.xml:
+
+<dependency>
+    <groupId>io.github.buildblocks</groupId>
+    <artifactId>buildblocks-api-response-spring-boot-starter</artifactId>
+    <version>RELEASE_VERSION</version>
+</dependency>
+Replace RELEASE_VERSION with the actual published version.
+
+After adding the dependency, the module's auto-configuration can register the default API exception handler and request ID filter in a compatible Spring Boot servlet application.
+
 ## License
 
 The license for this module will be specified when the repository's licensing terms are finalized.
