@@ -1,5 +1,7 @@
 package io.github.buildblocks.apiresponse.filter;
 
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -10,6 +12,7 @@ import java.io.IOException;
 import java.util.UUID;
 import java.util.regex.Pattern;
 
+@Order(Ordered.HIGHEST_PRECEDENCE)
 public class RequestIdFilter extends OncePerRequestFilter {
 
     public static final String REQUEST_ID_HEADER = "X-Request-ID";
