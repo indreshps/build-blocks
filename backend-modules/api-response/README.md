@@ -200,7 +200,7 @@ This module is under development and has not been published to Maven Central yet
 ### Step 1: Clone the Repository
 
 ```bash
-git clone https://github.com/indreshps5/build-blocks.git
+git clone https://github.com/indreshps/build-blocks.git
 ```
 
 ### Step 2: Install the Module
