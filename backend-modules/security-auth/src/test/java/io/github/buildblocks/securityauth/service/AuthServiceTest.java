@@ -100,4 +100,22 @@ class AuthServiceTest {
         assertThrows(InvalidCredentialsException.class,
                 () -> authService.login("ghost", "secret123"));
     }
+
+
+    @Test
+    void registerUsesConfiguredDefaultRole() {
+        AuthService customRoleService = new AuthService(userStore, passwordEncoder, jwtService, "MEMBER");
+        when(userStore.existsByUsername("indresh")).thenReturn(false);
+
+        customRoleService.register("indresh", "secret123");
+
+        verify(userStore).save(eq("indresh"), any(), eq(Set.of("MEMBER")));
+    }
+
+    @Test
+    void blankDefaultRoleIsRefused() {
+        assertThrows(IllegalArgumentException.class,
+                () -> new AuthService(userStore, passwordEncoder, jwtService, "  "));
+    }
+    
 }

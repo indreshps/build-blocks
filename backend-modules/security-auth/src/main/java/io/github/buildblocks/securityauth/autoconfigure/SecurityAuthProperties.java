@@ -14,6 +14,11 @@ public class SecurityAuthProperties {
 
     private List<String> publicPaths = new ArrayList<>(List.of("/api/auth/**"));
 
+    private String defaultRole = "USER";
+
+public String getDefaultRole() { return defaultRole; }
+public void setDefaultRole(String defaultRole) { this.defaultRole = defaultRole; }
+
     public boolean isEnabled() { return enabled; }
     public void setEnabled(boolean enabled) { this.enabled = enabled; }
 

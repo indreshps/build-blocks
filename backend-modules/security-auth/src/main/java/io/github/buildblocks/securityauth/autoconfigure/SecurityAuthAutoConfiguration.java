@@ -55,18 +55,19 @@ public class SecurityAuthAutoConfiguration {
                 properties.getJwt().getExpirationMinutes());
     }
 
-    @Bean
+   @Bean
     @ConditionalOnMissingBean(AuthService.class)
     public AuthService authService(ObjectProvider<AuthUserStore> userStoreProvider,
                                    PasswordEncoder passwordEncoder,
-                                   JwtService jwtService) {
+                                   JwtService jwtService,
+                                   SecurityAuthProperties properties) {
         AuthUserStore userStore = userStoreProvider.getIfAvailable();
         if (userStore == null) {
             throw new IllegalStateException(
                     "buildblocks security-auth needs an AuthUserStore bean. "
                             + "Create a class that implements AuthUserStore and annotate it with @Component.");
         }
-        return new AuthService(userStore, passwordEncoder, jwtService);
+        return new AuthService(userStore, passwordEncoder, jwtService, properties.getDefaultRole());
     }
 
     @Bean
