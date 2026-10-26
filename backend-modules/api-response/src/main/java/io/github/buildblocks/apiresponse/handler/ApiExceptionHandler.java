@@ -13,6 +13,8 @@ import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.time.Instant;
 import java.util.List;
@@ -20,6 +22,8 @@ import java.util.Map;
 
 @RestControllerAdvice
 public class ApiExceptionHandler {
+
+        private static final Logger log = LoggerFactory.getLogger(ApiExceptionHandler.class);
 
     @ExceptionHandler(ApiException.class)
     public ResponseEntity<ApiErrorResponse> handleApiException(
@@ -84,6 +88,9 @@ public class ApiExceptionHandler {
     public ResponseEntity<ApiErrorResponse> handleUnexpectedException(
             Exception exception,
             HttpServletRequest request) {
+
+                log.error("Unexpected error on {} (requestId={})",
+                request.getRequestURI(), getRequestId(request), exception);
 
         ApiError error = new ApiError(
                 ErrorCode.INTERNAL_SERVER_ERROR.name(),
