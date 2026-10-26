@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.security.access.AccessDeniedException;
 
 import io.github.buildblocks.apiresponse.filter.RequestIdFilter;
 import io.github.buildblocks.apiresponse.response.ApiErrorResponse;
@@ -45,4 +46,20 @@ class AuthExceptionHandlerTest {
         assertEquals("CONFLICT", body.error().code());
         assertEquals("/api/auth/register", body.path());
     }
+
+    @Test
+    void accessDeniedReturns403() {
+        MockHttpServletRequest request = new MockHttpServletRequest("GET", "/api/admin/ping");
+        request.setAttribute(RequestIdFilter.REQUEST_ID_ATTRIBUTE, "req-test-2");
+
+        ResponseEntity<ApiErrorResponse> response =
+                handler.handleAccessDenied(new AccessDeniedException("denied"), request);
+
+        assertEquals(403, response.getStatusCode().value());
+        ApiErrorResponse body = response.getBody();
+        assertEquals("FORBIDDEN", body.error().code());
+        assertEquals("req-test-2", body.error().requestId());
+        assertEquals("/api/admin/ping", body.path());
+    }
+    
 }

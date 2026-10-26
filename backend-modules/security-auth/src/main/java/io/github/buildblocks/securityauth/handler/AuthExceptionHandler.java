@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.security.access.AccessDeniedException;
 
 import io.github.buildblocks.apiresponse.exception.ErrorCode;
 import io.github.buildblocks.apiresponse.filter.RequestIdFilter;
@@ -32,6 +33,13 @@ public class AuthExceptionHandler {
     public ResponseEntity<ApiErrorResponse> handleUsernameExists(
             UsernameAlreadyExistsException ex, HttpServletRequest request) {
         return build(HttpStatus.CONFLICT, ErrorCode.CONFLICT, ex.getMessage(), request);
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<ApiErrorResponse> handleAccessDenied(
+            AccessDeniedException ex, HttpServletRequest request) {
+        return build(HttpStatus.FORBIDDEN, ErrorCode.FORBIDDEN,
+                "You do not have permission to perform this action", request);
     }
 
     private ResponseEntity<ApiErrorResponse> build(
